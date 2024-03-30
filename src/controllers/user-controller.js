@@ -29,7 +29,6 @@ const getUser = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const user = req.body;
-    console.log("User:", user);
     const newUser = await userModel.createUser(user);
     res.json(newUser);
   } catch (error) {
@@ -82,6 +81,18 @@ const getCertifiers = async (req, res) => {
   }
 };
 
+const authenticateUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.authenticateUser(email, password);
+    !user
+      ? res.status(404).json({ message: "Invalid username or password" })
+      : res.json({ user, authenticated: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUser,
@@ -90,4 +101,5 @@ module.exports = {
   deleteUser,
   getAdmins,
   getCertifiers,
+  authenticateUser,
 };

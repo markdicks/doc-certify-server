@@ -60,6 +60,13 @@ class User {
     const query = "DELETE FROM users WHERE user_id = $1;";
     await pool.query(query, [id]);
   }
+
+  async authenticateUser(email, password) {
+    const query =
+      "SELECT * FROM users WHERE email = $1 OR username = $1 AND password = $2;";
+    const { rows } = await pool.query(query, [email, password]);
+    return rows[0];
+  }
 }
 
 module.exports = new User();
