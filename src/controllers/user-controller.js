@@ -15,7 +15,6 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("ID:", id);
     const user = await userModel.getUser(id);
     if (!user) {
       res.status(404).json({ message: "User not found" });
