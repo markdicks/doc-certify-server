@@ -38,9 +38,9 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const id = req.params.id;
     const user = req.body;
-    const updatedUser = await userModel.updateUser(id, user);
+    console.log("User:", user);
+    const updatedUser = await userModel.updateUser(user.id, user);
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,7 +51,7 @@ const deleteUser = async (req, res) => {
   try {
     const id = req.params.id;
     await userModel.deleteUser(id);
-    res.json({ message: "User deleted" });
+    res.json({ message: "Account deleted" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

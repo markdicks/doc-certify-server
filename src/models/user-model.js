@@ -67,6 +67,13 @@ class User {
     const { rows } = await pool.query(query, [email, password]);
     return rows[0];
   }
+
+  async getAdminStats() {
+    const query = "Count * FROM users WHERE role_id = 1;";
+    const { rows } = await pool.query;
+
+    return rows[0];
+  }
 }
 
 module.exports = new User();
