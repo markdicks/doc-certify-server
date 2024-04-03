@@ -1,5 +1,6 @@
 const pool = require("../connection/pool");
 
+// interact with the users table in the database and model how you return the data for web consumption
 class User {
   async getUsers() {
     const query = "SELECT * FROM users WHERE role_id=3;";

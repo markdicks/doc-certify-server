@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const routes = require("./routes");
+require("dotenv").config();
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+require("dotenv").config();
 app.use("/api", routes);
 
 app.use(function (req, res, next) {
@@ -35,9 +36,13 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+// port to run your server on
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(
+    `Server is running on port ${PORT}\n >>>> http://localhost:${PORT} <<<<`
+  );
 });
 
 module.exports = app;

@@ -54,7 +54,7 @@ CREATE TABLE Documents(
   description varchar(255) NOT NULL,
   copy_file bytea NOT NULL,
   original_file bytea NOT NULL,
-  certificate_file bytea NULL,
+  certified_file bytea NULL,
   upload_date timestamp DEFAULT CURRENT_TIMESTAMP,
   end_date timestamp NULL,
   FOREIGN KEY (user_id) REFERENCES Users(user_id),
