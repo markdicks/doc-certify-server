@@ -38,7 +38,6 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const user = req.body;
-    console.log("User:", user);
     const updatedUser = await userModel.updateUser(user.id, user);
     res.json(updatedUser);
   } catch (error) {
