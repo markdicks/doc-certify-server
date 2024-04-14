@@ -86,6 +86,9 @@ CREATE TABLE CertifierStats(
 );
 
 INSERT INTO Roles(name)
+  VALUES ('Super Admin');
+
+INSERT INTO Roles(name)
   VALUES ('Admin');
 
 INSERT INTO Roles(name)

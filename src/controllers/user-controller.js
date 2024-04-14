@@ -1,5 +1,10 @@
 const userModel = require("../models/user-model");
 
+const UNIQUE_CONSTRAINT_ERROR_MESSAGE = {
+  email: "Email already exists",
+  phone: "Phone number already exists",
+};
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.getUsers();
@@ -31,7 +36,15 @@ const createUser = async (req, res) => {
     const newUser = await userModel.createUser(user);
     res.json(newUser);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const isUniqueViolationError = error.message.includes("unique constraint");
+    const key = error.message.includes("email") ? "email" : "phone";
+    isUniqueViolationError
+      ? res.status(400).json({
+          error: {
+            [key]: UNIQUE_CONSTRAINT_ERROR_MESSAGE[key],
+          },
+        })
+      : res.status(500).json({ error: error.message });
   }
 };
 
