@@ -13,43 +13,56 @@ END IF;
 END
 $$;
 
--- Create the tables
-DROP TABLE IF EXISTS Roles CASCADE;
+------------------------------ CREATE TABLES --------------------------
+--DROP TABLE IF EXISTS Roles CASCADE;
+--DROP TABLE IF EXISTS statuses CASCADE;
+--DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS Clients CASCADE;
 
-CREATE TABLE Roles(
-  role_id serial PRIMARY KEY,
-  name varchar(50) NOT NULL
-);
-
-DROP TABLE IF EXISTS Users CASCADE;
-
-CREATE TABLE Users(
+CREATE TABLE Clients(
   user_id serial PRIMARY KEY,
-  role_id int NOT NULL,
   first_name varchar(50) NOT NULL,
   last_name varchar(50) NOT NULL,
   phone DECIMAL(13) UNIQUE NOT NULL,
   email varchar(100) UNIQUE NOT NULL,
   username varchar(10) CHECK (LENGTH(username) >= 5 AND LENGTH(username) <= 10) UNIQUE NOT NULL,
   password varchar(16) NOT NULL,
-  registration_date timestamp DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (role_id) REFERENCES Roles(role_id)
+  registration_date timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Statuses table
-DROP TABLE IF EXISTS Statuses CASCADE;
+DROP TABLE IF EXISTS Admins CASCADE;
 
-CREATE TABLE Statuses(
-  status_id serial PRIMARY KEY,
-  name varchar(50) NOT NULL
+CREATE TABLE Admins(
+  user_id serial PRIMARY KEY,
+  user_type varchar(5) NULL DEFAULT 'admin',
+  first_name varchar(50) NOT NULL,
+  last_name varchar(50) NOT NULL,
+  phone DECIMAL(13) UNIQUE NOT NULL,
+  email varchar(100) UNIQUE NOT NULL,
+  username varchar(10) CHECK (LENGTH(username) >= 5 AND LENGTH(username) <= 10) UNIQUE NOT NULL,
+  password varchar(16) NOT NULL,
+  registration_date timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS Certifiers CASCADE;
+
+CREATE TABLE Certifiers(
+  user_id serial PRIMARY KEY,
+  first_name varchar(50) NOT NULL,
+  last_name varchar(50) NOT NULL,
+  phone DECIMAL(13) UNIQUE NOT NULL,
+  email varchar(100) UNIQUE NOT NULL,
+  username varchar(10) CHECK (LENGTH(username) >= 5 AND LENGTH(username) <= 10) UNIQUE NOT NULL,
+  password varchar(16) NOT NULL,
+  registration_date timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS Documents CASCADE;
 
 CREATE TABLE Documents(
   document_id serial PRIMARY KEY,
-  user_id int NOT NULL,
-  status_id int NOT NULL,
+  client_id int NOT NULL,
+  status varchar(30) DEFAULT 'pending',
   name varchar(100) NOT NULL,
   description varchar(255) NOT NULL,
   copy_file bytea NOT NULL,
@@ -57,11 +70,9 @@ CREATE TABLE Documents(
   certified_file bytea NULL,
   upload_date timestamp DEFAULT CURRENT_TIMESTAMP,
   end_date timestamp NULL,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id),
-  FOREIGN KEY (status_id) REFERENCES Statuses(status_id)
+  FOREIGN KEY (client_id) REFERENCES Clients(user_id)
 );
 
--- Create stats table for the admin user
 DROP TABLE IF EXISTS AdminStats CASCADE;
 
 CREATE TABLE Stats(
@@ -74,7 +85,6 @@ CREATE TABLE Stats(
   rejected_documents int NOT NULL
 );
 
--- Create states for the certifier user
 DROP TABLE IF EXISTS CertifierStats CASCADE;
 
 CREATE TABLE CertifierStats(
@@ -82,45 +92,25 @@ CREATE TABLE CertifierStats(
   certifier_id int NOT NULL,
   total_jobs int NOT NULL,
   average_time int NOT NULL,
-  FOREIGN KEY (certifier_id) REFERENCES Users(user_id)
+  FOREIGN KEY (certifier_id) REFERENCES Clients(user_id)
 );
 
-INSERT INTO Roles(name)
-  VALUES ('Super Admin');
+------------------------------ END OF CREATE TABLES ------------------------------
+------------------------------ INSERT INTO TABLES ------------------------------
+-- Insert into Admins Table
+INSERT INTO Admins(user_type, first_name, last_name, phone, email, username, PASSWORD)
+  VALUES ('sudo', 'Super', 'Admin', 27795350596, 'sudo@mail.com', 'SuperAdmin', 'sudo123!');
 
-INSERT INTO Roles(name)
-  VALUES ('Admin');
+INSERT INTO Admins(first_name, last_name, phone, email, username, PASSWORD)
+  VALUES ('Just', 'Admin', 27692248991, 'admin@mail.com', 'JustAdmin', 'admin123!');
 
-INSERT INTO Roles(name)
-  VALUES ('Certifier');
+-- Insert into Certifiers Table
+INSERT INTO Certifiers(first_name, last_name, phone, email, username, PASSWORD)
+  VALUES ('John', 'Wick', 27147258369, 'johnw@mail.com', 'JohnWick', 'john123');
 
-INSERT INTO Roles(name)
-  VALUES ('User');
+INSERT INTO Certifiers(first_name, last_name, phone, email, username, PASSWORD)
+  VALUES ('Jane', 'Doe', 27123987456, 'janed@mail.com', 'JaneDoe', 'jane123');
 
--- Insert Statuses
-INSERT INTO Statuses(name)
-  VALUES ('Pending');
-
-INSERT INTO Statuses(name)
-  VALUES ('Approved');
-
-INSERT INTO Statuses(name)
-  VALUES ('Rejected');
-
-INSERT INTO Statuses(name)
-  VALUES ('Expired');
-
--- Insert Admin user
-INSERT INTO Users(role_id, first_name, last_name, phone, email, username, PASSWORD)
-  VALUES (1, 'Super', 'Admin', 0123456789, 'admin@mail.com', 'SuperAdmin', 'admin123');
-
--- Insert 3 Certifier user
-INSERT INTO Users(role_id, first_name, last_name, phone, email, username, PASSWORD)
-  VALUES (2, 'John', 'Wick', 0147258369, 'johnw@mail.com', 'JohnWick', 'john123');
-
-INSERT INTO Users(role_id, first_name, last_name, phone, email, username, PASSWORD)
-  VALUES (2, 'Jane', 'Doe', 0123987456, 'janed@mail.com', 'JaneDoe', 'jane123');
-
-INSERT INTO Users(role_id, first_name, last_name, phone, email, username, PASSWORD)
-  VALUES (2, 'Jack', 'Sparrow', 0123654789, 'jacks@mail.com', 'JSparrow', 'jack123');
+INSERT INTO Certifiers(first_name, last_name, phone, email, username, PASSWORD)
+  VALUES ('Jack', 'Sparrow', 27123654789, 'jacks@mail.com', 'JSparrow', 'jack123');
 
