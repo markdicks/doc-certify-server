@@ -1,10 +1,25 @@
 const pool = require("../connection/pool");
+const userModel = require("./user-model");
 
 class App {
   async getAdminStats() {
-    const query =
-      "SELECT r.name, COUNT(u.*) as user_count FROM users u INNER JOIN roles r ON u.role_id = r.role_id GROUP BY r.name;";
-    const { rows } = await pool.query(query);
+    const admins = await userModel.getAdmins();
+    const certifiers = await userModel.getCertifiers();
+    const users = await userModel.getUsers();
+    const rows = [
+      {
+        name: "admin",
+        user_count: admins?.length,
+      },
+      {
+        name: "certifier",
+        user_count: certifiers?.length,
+      },
+      {
+        name: "Certifyee",
+        user_count: users?.length,
+      },
+    ];
     return rows;
   }
 }
