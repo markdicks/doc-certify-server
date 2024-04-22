@@ -67,7 +67,8 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { id, userType } = req.params;
+    const { id } = req.params;
+    const { userType } = req.query;
     await userModel.deleteUser(id, userType);
     res.json({ message: "Account deleted" });
   } catch (error) {
