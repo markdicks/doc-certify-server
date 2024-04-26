@@ -57,8 +57,8 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const user = req.body;
-    const { userType } = req.params;
-    const updatedUser = await userModel.updateUser(user.id, user, userType);
+    const { userType } = req.query;
+    const updatedUser = await userModel.updateUser(user, userType);
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });

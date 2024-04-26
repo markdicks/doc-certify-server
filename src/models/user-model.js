@@ -27,7 +27,9 @@ class User {
   }
 
   async createUser(user, userType) {
-    const query = `INSERT INTO ${userType}s (first_name, last_name, username, email, phone, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+    const query = `INSERT INTO ${
+      userType === "certifyee" ? "client" : userType
+    }s (first_name, last_name, username, email, phone, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
     const { rows } = await pool.query(query, [
       user.first_name,
       user.last_name,
@@ -39,8 +41,10 @@ class User {
     return rows[0];
   }
 
-  async updateUser(id, user, userType) {
-    const query = `UPDATE ${userType} SET username = $1, email = $2, password = $3, phone = $4, first_name = $5, last_name = $6 WHERE user_id = $8 RETURNING *;`;
+  async updateUser(user, userType) {
+    const query = `UPDATE ${
+      userType.toLowerCase() === "certifyee" ? "client" : userType
+    }s SET username = $1, email = $2, password = $3, phone = $4, first_name = $5, last_name = $6 WHERE user_id = $7 RETURNING *;`;
     const { rows } = await pool.query(query, [
       user.username,
       user.email,
@@ -48,7 +52,7 @@ class User {
       user.phone,
       user.first_name,
       user.last_name,
-      id,
+      user.id,
     ]);
     return rows[0];
   }
