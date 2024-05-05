@@ -1,5 +1,4 @@
 const docModel = require("../models/doc-model");
-const multer = require("multer");
 
 const getAllDocs = async (req, res) => {
   try {
@@ -26,21 +25,13 @@ const getDoc = async (req, res) => {
   }
 };
 
-// Multer configuration
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 const saveDoc = async (req, res) => {
-  console.log("SaveDoc....");
   try {
     const { client_id, name, description } = req.body;
     console.log("req.file", req.files.copy_file[0]);
     const copyFile = req.files.copy_file[0].buffer.toString("base64");
     const originalFile =
       req.files.original_file?.[0]?.buffer.toString("base64");
-
-    console.log("CopyFile", copyFile);
-    console.log("OriginalFile", originalFile);
     const newDoc = await docModel.saveDoc({
       client_id,
       name,
@@ -48,7 +39,6 @@ const saveDoc = async (req, res) => {
       copy_file: copyFile,
       original_file: copyFile,
     });
-    console.log("New Doc", newDoc);
     res.json(newDoc);
   } catch (error) {
     res.status(500).json({ error: error.message });
