@@ -63,7 +63,9 @@ class User {
   }
 
   async authenticateUser(email, password, userType) {
-    const query = `SELECT * FROM ${userType}s WHERE (email = $1 OR username = $1) AND password = $2;`;
+    const query = `SELECT * FROM ${
+      userType.toLowerCase() === "certifyee" ? "client" : userType
+    }s WHERE (email = $1 OR username = $1) AND password = $2;`;
     const { rows } = await pool.query(query, [email, password]);
     return rows[0];
   }
