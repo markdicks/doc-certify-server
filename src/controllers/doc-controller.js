@@ -27,17 +27,11 @@ const getDoc = async (req, res) => {
 
 const saveDoc = async (req, res) => {
   try {
-    const { client_id, name, description } = req.body;
-    console.log("req.file", req.files.copy_file[0]);
-    const copyFile = req.files.copy_file[0].buffer.toString("base64");
-    const originalFile =
-      req.files.original_file?.[0]?.buffer.toString("base64");
+    const { client_id, document_type } = req.body;
+    console.log(req.files);
     const newDoc = await docModel.saveDoc({
       client_id,
-      name,
-      description,
-      copy_file: copyFile,
-      original_file: copyFile,
+      document_type,
     });
     res.json(newDoc);
   } catch (error) {

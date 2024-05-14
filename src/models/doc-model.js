@@ -15,13 +15,10 @@ class Doc {
 
   async saveDoc(doc) {
     const query =
-      "INSERT INTO documents (client_id, name, description, copy_file, original_file) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
+      "INSERT INTO documents (client_id, document_type) VALUES ($1, $2) RETURNING *;";
     const { rows } = await pool.query(query, [
       doc.client_id,
-      doc.name,
-      doc.description,
-      doc.copy_file,
-      doc.original_file,
+      doc.document_type,
     ]);
     return rows[0];
   }

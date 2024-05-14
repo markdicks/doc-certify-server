@@ -63,11 +63,7 @@ CREATE TABLE Documents(
   document_id serial PRIMARY KEY,
   client_id int NOT NULL,
   status varchar(30) DEFAULT 'pending',
-  name varchar(100) NOT NULL,
-  description varchar(255) NOT NULL,
-  copy_file bytea NOT NULL,
-  original_file bytea NOT NULL,
-  certified_file bytea NULL,
+  document_type varchar(255) NOT NULL,
   upload_date timestamp DEFAULT CURRENT_TIMESTAMP,
   end_date timestamp NULL,
   FOREIGN KEY (client_id) REFERENCES Clients(user_id)
