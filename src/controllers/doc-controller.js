@@ -28,7 +28,6 @@ const getDoc = async (req, res) => {
 const saveDoc = async (req, res) => {
   try {
     const { client_id, document_type } = req.body;
-    console.log(req.files);
     const newDoc = await docModel.saveDoc({
       client_id,
       document_type,
