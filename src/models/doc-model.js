@@ -25,7 +25,7 @@ class Doc {
 
   async updateDoc(doc) {
     const query =
-      "UPDATE documents SET title = $1, content = $2 WHERE doc_id = $3 RETURNING *;";
+      "UPDATE documents SET title = $1, content = $2 WHERE document_id = $3 RETURNING *;";
     const { rows } = await pool.query(query, [
       doc.title,
       doc.content,
@@ -35,7 +35,7 @@ class Doc {
   }
 
   async deleteDoc(id) {
-    const query = "DELETE FROM documents WHERE doc_id = $1;";
+    const query = "DELETE FROM documents WHERE document_id = $1;";
     await pool.query(query, [id]);
   }
 }
