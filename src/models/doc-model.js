@@ -38,6 +38,26 @@ class Doc {
     const query = "DELETE FROM documents WHERE document_id = $1;";
     await pool.query(query, [id]);
   }
+
+  async getNumDocsCreatedToday() {
+    const query =
+      "SELECT COUNT(*) FROM documents WHERE upload_date = CURRENT_DATE;";
+    const { rows } = await pool.query(query);
+    return rows[0].count;
+  }
+
+  async getNumDocsCreatedThisMonth() {
+    const query =
+      "SELECT COUNT(*) FROM documents WHERE EXTRACT(MONTH FROM upload_date) = EXTRACT(MONTH FROM CURRENT_DATE);";
+    const { rows } = await pool.query(query);
+    return rows[0].count;
+  }
+
+  async getTotalDocs() {
+    const query = "SELECT COUNT(*) FROM documents;";
+    const { rows } = await pool.query(query);
+    return rows[0].count;
+  }
 }
 
 module.exports = new Doc();

@@ -21,4 +21,3 @@ install the following:
 ### TO-DO
 
 - [ ] Add comments to code.
-- [X] Add links of things required to be installed.
