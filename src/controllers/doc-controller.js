@@ -71,11 +71,22 @@ const deleteDoc = async (req, res) => {
   }
 };
 
+const assignCertifier = async (req, res) => {
+  try {
+    const { doc_id, certifier_id } = req.body;
+    const doc = await docModel.assignCertifier(doc_id, certifier_id);
+    res.json(doc);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getDoc,
   saveDoc,
   updateDoc,
   deleteDoc,
   getAllDocs,
+  assignCertifier,
   getDocsByClient,
 };

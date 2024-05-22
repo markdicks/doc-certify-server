@@ -86,6 +86,14 @@ class Doc {
     const { rows } = await pool.query(query);
     return rows[0].count;
   }
+
+  async assignCertifier(doc_id, certifier_id) {
+    console.log(doc_id, certifier_id);
+    const query =
+      "UPDATE documents SET certifier_id = $1 AND status = 'processing' WHERE document_id = $2 RETURNING *;";
+    const { rows } = await pool.query(query, [certifier_id, doc_id]);
+    return rows[0];
+  }
 }
 
 module.exports = new Doc();
