@@ -10,7 +10,8 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const clientId = req.body.client_id;
+    cb(null, clientId + "_" + file.originalname);
   },
 });
 
