@@ -65,8 +65,10 @@ CREATE TABLE Documents(
   status varchar(30) DEFAULT 'pending',
   document_type varchar(255) NOT NULL,
   upload_date timestamp DEFAULT CURRENT_TIMESTAMP,
-  updated_date timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
   end_date timestamp NULL,
+  certifier_id int NULL,
+  FOREIGN KEY (certifier_id) REFERENCES Certifiers(user_id),
   FOREIGN KEY (client_id) REFERENCES Clients(user_id)
 );
 

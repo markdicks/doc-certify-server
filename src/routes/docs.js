@@ -1,30 +1,41 @@
 const express = require("express");
 const docController = require("../controllers/doc-controller");
+const docModel = require("../models/doc-model");
 const multer = require("multer");
 
 const router = express.Router();
 
-// Multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "./files");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    const uniqueSuffix = Date.now();
+    cb(null, uniqueSuffix + file.originalname);
   },
 });
 
-// Middleware to handle multiple files
 const upload = multer({ storage: storage });
 
-const filesMiddleware = () =>
-  upload.fields([
-    { name: "color", maxCount: 1 },
-    { name: "original", maxCount: 1 },
-  ]);
+const middleware = upload.fields([
+  { name: "copy", maxCount: 1 },
+  { name: "original", maxCount: 1 },
+]);
 
-router.post("/doc", filesMiddleware, docController.saveDoc);
+router.post("/doc/upload", middleware, async (req, res) => {
+  try {
+    const { client_id, document_type } = req.body;
+    const newDoc = await docModel.saveDoc({
+      client_id,
+      document_type,
+    });
+    res.json(newDoc);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 router.get("/docs", docController.getDocsByClient);
+router.get("/jobs", docController.getAllDocs);
 router.delete("/doc/:id", docController.deleteDoc);
 router.put("/docs/:id", docController.updateDoc);
 
