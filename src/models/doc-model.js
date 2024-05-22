@@ -75,7 +75,6 @@ class Doc {
   }
 
   async assignCertifier(doc_id, certifier_id) {
-    console.log(doc_id, certifier_id);
     const query =
       "UPDATE documents SET certifier_id = $1, status = 'processing' WHERE document_id = $2 RETURNING *;";
     const { rows } = await pool.query(query, [Number(certifier_id), doc_id]);
