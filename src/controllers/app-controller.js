@@ -10,6 +10,17 @@ const getAdminStats = async (req, res) => {
   }
 };
 
+const getUserStats = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const stats = await appModel.getUserStats(id);
+    res.json({ stats });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAdminStats,
+  getUserStats,
 };

@@ -3,5 +3,6 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/app/admin", appController.getAdminStats);
+router.get("/app/certifyee/:id", appController.getUserStats);
 
 module.exports = router;

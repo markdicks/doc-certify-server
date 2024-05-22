@@ -46,6 +46,27 @@ class Doc {
     await pool.query(query, [id]);
   }
 
+  async getDocsCertified(client_id) {
+    const query =
+      "SELECT * FROM documents WHERE client_id = $1 AND status = 'certified';";
+    const { rows } = await pool.query(query, [client_id]);
+    return rows;
+  }
+
+  async getDocsPending(client_id) {
+    const query =
+      "SELECT * FROM documents WHERE client_id = $1 AND status = 'pending';";
+    const { rows } = await pool.query(query, [client_id]);
+    return rows;
+  }
+
+  async getDocsRejected(client_id) {
+    const query =
+      "SELECT * FROM documents WHERE client_id = $1 AND status = 'rejected';";
+    const { rows } = await pool.query(query, [client_id]);
+    return rows;
+  }
+
   async getNumDocsCreatedToday() {
     const query =
       "SELECT COUNT(*) FROM documents WHERE upload_date = CURRENT_DATE;";
