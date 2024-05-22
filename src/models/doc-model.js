@@ -74,24 +74,11 @@ class Doc {
     return rows[0].count;
   }
 
-  async getNumDocsCreatedThisMonth() {
-    const query =
-      "SELECT COUNT(*) FROM documents WHERE EXTRACT(MONTH FROM upload_date) = EXTRACT(MONTH FROM CURRENT_DATE);";
-    const { rows } = await pool.query(query);
-    return rows[0].count;
-  }
-
-  async getTotalDocs() {
-    const query = "SELECT COUNT(*) FROM documents;";
-    const { rows } = await pool.query(query);
-    return rows[0].count;
-  }
-
   async assignCertifier(doc_id, certifier_id) {
     console.log(doc_id, certifier_id);
     const query =
-      "UPDATE documents SET certifier_id = $1 AND status = 'processing' WHERE document_id = $2 RETURNING *;";
-    const { rows } = await pool.query(query, [certifier_id, doc_id]);
+      "UPDATE documents SET certifier_id = $1, status = 'processing' WHERE document_id = $2 RETURNING *;";
+    const { rows } = await pool.query(query, [Number(certifier_id), doc_id]);
     return rows[0];
   }
 }
