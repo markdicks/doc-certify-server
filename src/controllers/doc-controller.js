@@ -1,10 +1,21 @@
 const docModel = require("../models/doc-model");
+const userModel = require("../models/user-model");
 
 const getAllDocs = async (req, res) => {
   try {
     const docs = await docModel.getDocs();
     if (!docs) {
       res.status(404).json({ message: "No documents found" });
+    }
+
+    for (let doc of docs) {
+      if (doc.certifier_id) {
+        const certifier = await userModel.getUser(
+          doc.certifier_id,
+          "certifier"
+        );
+        doc.certifier = certifier;
+      }
     }
     res.json({ docs });
   } catch (error) {
