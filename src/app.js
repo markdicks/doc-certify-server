@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const routes = require("./routes");
+const fs = require('fs');
 require("dotenv").config();
 
 const app = express();
@@ -25,6 +26,13 @@ app.use("/api", routes);
 app.use(function (req, res, next) {
   next(createError(404));
 });
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Create uploads folder if it doesn't exist
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development

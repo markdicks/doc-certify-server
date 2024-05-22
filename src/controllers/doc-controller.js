@@ -25,6 +25,19 @@ const getDoc = async (req, res) => {
   }
 };
 
+const getDocsByClient = async (req, res) => {
+  try {
+    const { client_id } = req.query;
+    const docs = await docModel.getDocsByClient(client_id);
+    if (!docs) {
+      res.status(404).json({ message: "No documents found" });
+    }
+    res.json({ docs });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const saveDoc = async (req, res) => {
   try {
     const { client_id, document_type } = req.body;
@@ -59,9 +72,10 @@ const deleteDoc = async (req, res) => {
 };
 
 module.exports = {
-  getAllDocs,
   getDoc,
   saveDoc,
   updateDoc,
   deleteDoc,
+  getAllDocs,
+  getDocsByClient,
 };

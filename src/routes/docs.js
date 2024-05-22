@@ -6,6 +6,14 @@ const router = express.Router();
 
 // Multer configuration
 const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+/* const storage = multer.diskStorage({
   destination: function (req, files, cb) {
     // Destination based on fieldname
     if (files.fieldname === "original") {
@@ -20,16 +28,18 @@ const storage = multer.diskStorage({
   filename: function (_, file, cb) {
     cb(null, file.originalname);
   },
-});
+}); */
 
 // Middleware to handle multiple files
 const upload = multer({ storage: storage });
 
-const filesMiddleware = upload.fields([{ name: "original" }, { name: "copy" }]);
+const filesMiddleware = upload.fields([
+  { name: "color", maxCount: 1 },
+  { name: "original", maxCount: 1 },
+]);
 
-router.get("/docs", docController.getAllDocs);
 router.post("/doc", filesMiddleware, docController.saveDoc);
-router.get("/docs/:id", docController.getDoc);
+router.get("/docs", docController.getDocsByClient);
 router.delete("/docs/:id", docController.deleteDoc);
 router.put("/docs/:id", docController.updateDoc);
 

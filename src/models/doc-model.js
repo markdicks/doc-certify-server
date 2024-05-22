@@ -8,9 +8,16 @@ class Doc {
   }
 
   async getDoc(id) {
-    const query = "SELECT * FROM documents WHERE doc_id = $1;";
+    const query = "SELECT * FROM documents WHERE document_id = $1;";
     const { rows } = await pool.query(query, [id]);
     return rows[0];
+  }
+
+  async getDocsByClient(client_id) {
+    const query =
+      "SELECT * FROM documents WHERE client_id = $1 ORDER BY upload_date DESC;";
+    const { rows } = await pool.query(query, [client_id]);
+    return rows;
   }
 
   async saveDoc(doc) {
