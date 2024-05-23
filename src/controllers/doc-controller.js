@@ -131,8 +131,8 @@ const rejectDoc = async (req, res) => {
 
 const certifyDoc = async (req, res) => {
   try {
-    const { id } = req.params;
-    const doc = await docModel.certifyDoc(id);
+    const { doc_id } = req.body;
+    const doc = await docModel.certifyDoc(doc_id);
     res.json(doc);
   } catch (error) {
     res.status(500).json({ error: error.message });
