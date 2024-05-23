@@ -63,6 +63,8 @@ CREATE TABLE Documents(
   document_id serial PRIMARY KEY,
   client_id int NOT NULL,
   status varchar(30) DEFAULT 'pending',
+  copy_file_name varchar(255) NOT NULL,
+  original_file_name varchar(255) NOT NULL,
   document_type varchar(255) NOT NULL,
   upload_date timestamp DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP,

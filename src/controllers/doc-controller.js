@@ -43,6 +43,15 @@ const getDocsByClient = async (req, res) => {
     if (!docs) {
       res.status(404).json({ message: "No documents found" });
     }
+
+    // Add the two files original and copy to each document, the files are stored in the uploads folder prefixed with the client_id
+    for (let doc of docs) {
+      const originalPath = `uploads/${client_id}_${doc.original_name}`;
+      const copyPath = `uploads/${client_id}_${doc.copy_name}`;
+      doc.original = originalPath;
+      doc.copy = copyPath;
+    }
+
     res.json({ docs });
   } catch (error) {
     res.status(500).json({ error: error.message });

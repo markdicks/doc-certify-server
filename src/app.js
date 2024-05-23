@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const routes = require("./routes");
-const fs = require('fs');
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -22,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 require("dotenv").config();
 app.use("/api", routes);
+app.use("/uploads", express.static("uploads"));
 
 app.use(function (req, res, next) {
   next(createError(404));

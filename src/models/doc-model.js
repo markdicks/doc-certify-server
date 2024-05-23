@@ -22,10 +22,12 @@ class Doc {
 
   async saveDoc(doc) {
     const query =
-      "INSERT INTO documents (client_id, document_type) VALUES ($1, $2) RETURNING *;";
+      "INSERT INTO documents (client_id, document_type, copy_file_name, original_file_name) VALUES ($1, $2, $3, $4) RETURNING *;";
     const { rows } = await pool.query(query, [
       doc.client_id,
       doc.document_type,
+      doc.copy_file_name,
+      doc.original_file_name,
     ]);
     return rows[0];
   }

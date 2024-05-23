@@ -23,17 +23,22 @@ const middleware = upload.fields([
 ]);
 
 router.post("/doc/upload", middleware, async (req, res) => {
+  const copyFileName = req.files["copy"][0].filename;
+  const originalFileName = req.files["original"][0].filename;
   try {
     const { client_id, document_type } = req.body;
     const newDoc = await docModel.saveDoc({
       client_id,
       document_type,
+      copy_file_name: copyFileName,
+      original_file_name: originalFileName,
     });
     res.json(newDoc);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 router.get("/docs", docController.getDocsByClient);
 router.put("/doc/assign", docController.assignCertifier);
 router.get("/jobs", docController.getAllDocs);
