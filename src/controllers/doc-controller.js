@@ -119,8 +119,30 @@ const getDocsByCertifier = async (req, res) => {
   }
 };
 
+const rejectDoc = async (req, res) => {
+  try {
+    const { doc_id } = req.body;
+    const doc = await docModel.rejectDoc(doc_id);
+    res.json(doc);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const certifyDoc = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await docModel.certifyDoc(id);
+    res.json(doc);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getDoc,
+  rejectDoc,
+  certifyDoc,
   saveDoc,
   updateDoc,
   deleteDoc,

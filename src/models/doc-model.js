@@ -89,6 +89,20 @@ class Doc {
     const { rows } = await pool.query(query, [certifier_id]);
     return rows;
   }
+
+  async rejectDoc(doc_id) {
+    const query =
+      "UPDATE documents SET status = 'rejected' WHERE document_id = $1 RETURNING *;";
+    const { rows } = await pool.query(query, [doc_id]);
+    return rows[0];
+  }
+
+  async certifyDoc(doc_id) {
+    const query =
+      "UPDATE documents SET status = 'certified' WHERE document_id = $1 RETURNING *;";
+    const { rows } = await pool.query(query, [doc_id]);
+    return rows[0];
+  }
 }
 
 module.exports = new Doc();

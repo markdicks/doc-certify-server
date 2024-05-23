@@ -40,9 +40,11 @@ router.post("/doc/upload", middleware, async (req, res) => {
 });
 
 router.get("/docs", docController.getDocsByClient);
+router.put("/doc/certify", docController.certifyDoc);
+router.put("/doc/reject", docController.rejectDoc);
 router.put("/doc/assign", docController.assignCertifier);
 router.get("/jobs", docController.getAllDocs);
-router.get('jobs/:id', docController.getDocsByClient);
+router.get("jobs/:id", docController.getDocsByClient);
 router.delete("/doc/:id", docController.deleteDoc);
 router.put("/docs/:id", docController.updateDoc);
 
