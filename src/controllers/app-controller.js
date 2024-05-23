@@ -20,7 +20,18 @@ const getUserStats = async (req, res) => {
   }
 };
 
+const getCertifierStats = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const stats = await appModel.getCertifierStats(id);
+    res.json({ stats });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAdminStats,
   getUserStats,
+  getCertifierStats,
 };

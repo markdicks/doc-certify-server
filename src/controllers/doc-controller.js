@@ -101,6 +101,24 @@ const assignCertifier = async (req, res) => {
   }
 };
 
+const getDocsByCertifier = async (req, res) => {
+  try {
+    const { client_id } = req.query;
+    const docs = await docModel.getDocsByCertifier(client_id);
+    if (!docs) {
+      res.status(404).json({ message: "No documents found" });
+    }
+
+    for (let doc of docs) {
+      const client = await userModel.getUser(doc.client_id, "client");
+      doc.client = client;
+    }
+    res.json({ docs });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getDoc,
   saveDoc,
@@ -109,4 +127,5 @@ module.exports = {
   getAllDocs,
   assignCertifier,
   getDocsByClient,
+  getDocsByCertifier,
 };

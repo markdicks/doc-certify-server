@@ -24,17 +24,30 @@ class App {
     return rows;
   }
 
-  async getCertifierStats() {
-    const certifiers = await userModel.getCertifiers();
-    const users = await userModel.getUsers();
+  async getCertifierStats(id) {
+    const docs = await docModel.getDocsByCertifier(id);
+    const totalDocsAssigned = docs?.length;
+    const certifiedDocs = docs.filter((doc) => doc.status === "certified");
+    const totalDocsCertified = certifiedDocs?.length;
+    const pendingDocs = docs.filter((doc) => doc.status === "pending");
+    const totalDocsPending = pendingDocs?.length;
+
     const rows = [
       {
-        name: "certifier",
-        user_count: certifiers?.length,
+        name: "Documents",
+        doc_count: totalDocsAssigned,
+        description: "Documents assigned to the certifier",
+      },
+
+      {
+        name: "Pending Documents",
+        doc_count: totalDocsPending,
+        description: "Documents pending certification",
       },
       {
-        name: "Certifyee",
-        user_count: users?.length,
+        name: "Certified Documents",
+        doc_count: totalDocsCertified,
+        description: "Documents certified by the certifier",
       },
     ];
     return rows;

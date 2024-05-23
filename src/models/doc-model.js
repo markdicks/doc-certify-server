@@ -82,6 +82,13 @@ class Doc {
     const { rows } = await pool.query(query, [Number(certifier_id), doc_id]);
     return rows[0];
   }
+
+  async getDocsByCertifier(certifier_id) {
+    const query =
+      "SELECT * FROM documents WHERE certifier_id = $1 ORDER BY upload_date DESC;";
+    const { rows } = await pool.query(query, [certifier_id]);
+    return rows;
+  }
 }
 
 module.exports = new Doc();
